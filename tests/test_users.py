@@ -18,7 +18,29 @@ def test_create_user(client):
     }
 
 
-def test_update_user(client): ...
+def test_update_user(client, user, token):
+    response = client.put(
+        f'/conta/{user.id}',
+        json={
+            'username': 'alice',
+            'email': 'alice@mader.com',
+            'senha': 'alice:mader',
+        },
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'username': 'alice',
+        'email': 'alice@mader.com',
+    }
 
 
-def test_delete_user(client): ...
+def test_delete_user(client, user, token):
+    response = client.delete(
+        f'/conta/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {'message': 'User deleted'}
