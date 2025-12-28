@@ -1,9 +1,11 @@
+from dataclasses import asdict
+
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from mader.models import User
-from dataclasses import asdict
+
 
 @pytest.mark.asyncio
 async def test_create_user(session: AsyncSession):

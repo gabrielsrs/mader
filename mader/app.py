@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from mader.routers import auth, users, books, authors
+
+from mader.routers import auth, authors, books, users
 
 app = FastAPI()
 
