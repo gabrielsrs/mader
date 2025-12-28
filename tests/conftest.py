@@ -1,4 +1,5 @@
 import factory
+import pytest
 import pytest_asyncio
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -53,6 +54,16 @@ async def user(session: AsyncSession):
     new_user.clean_password = password
 
     return new_user
+
+
+@pytest.fixture
+def token(client, user):
+    response = client.post(
+        '/auth/token',
+        data={'username': user.email, 'password': user.clean_password},
+    )
+
+    return response.json()['access_token']
 
 
 class UserFactory(factory.Factory):
