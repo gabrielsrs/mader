@@ -1,17 +1,33 @@
-import pytest
+import factory
 import pytest_asyncio
-
+from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.pool import StaticPool
 
+from mader.app import app
+from mader.database import get_session
 from mader.models import table_registry
+
+
+@pytest_asyncio.fixture
+async def client(session):
+    def get_session_overrride():
+        return session
+
+    with TestClient(app) as client:
+        app.dependency_overrides[get_session] = get_session_overrride
+
+        yield client
+
+    app.dependency_overrides.clear()
+
 
 @pytest_asyncio.fixture
 async def session():
     engine = create_async_engine(
         'sqlite+aiosqlite:///:memory:',
-        connect_args = {'check_same_thread': False},
-        poolclass=StaticPool
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool,
     )
 
     async with engine.begin() as conn:
