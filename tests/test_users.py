@@ -18,13 +18,27 @@ def test_create_user(client):
     }
 
 
+def test_create_existed_user(client, user):
+    response = client.post(
+        '/conta',
+        json={
+            'username': user.username,
+            'email': 'alice@mader.com',
+            'senha': 'alice:mader',
+        },
+    )
+
+    assert response.status_code == HTTPStatus.CONFLICT
+    assert response.json() == {'detail': 'Username already exists'}
+
+
 def test_update_user(client, user, token):
     response = client.put(
         f'/conta/{user.id}',
         json={
             'username': 'alice',
             'email': 'alice@mader.com',
-            'senha': 'alice:mader',
+            'senha': 'Alice1:@mader',
         },
         headers={'Authorization': f'Bearer {token}'},
     )

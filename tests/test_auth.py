@@ -13,6 +13,30 @@ def test_authentication(client, user):
     assert token['token_type'] == 'Bearer'
 
 
+def test_authentication_with_non_existed_user(client, user):
+    response = client.post(
+        '/auth/token',
+        data={'username': 'alice@mader.com', 'password': '123567'},
+    )
+
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert response.json() == {'detail': 'Incorrect email or password'}
+
+
+def test_unauthorized_user(client, user):
+    response = client.put(
+        f'/conta/{user.id}',
+        json={
+            'username': 'alice',
+            'email': 'alice@mader.com',
+            'password': '1234',
+        },
+    )
+
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert response.json() == {'detail': 'Not authenticated'}
+
+
 def test_refresh_token(client, token):
     response = client.post(
         '/auth/refresh-token', headers={'Authorization': f'Bearer {token}'}
