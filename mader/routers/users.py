@@ -27,13 +27,13 @@ async def create_user(user: UserSchema, session: Session):
     if db_user:
         if db_user.username == user.username:
             raise HTTPException(
-                datail='Username already exists',
+                detail='Username already exists',
                 status_code=HTTPStatus.CONFLICT,
             )
 
         if db_user.email == user.email:
             raise HTTPException(
-                datail='Email already exists', status_code=HTTPStatus.CONFLICT
+                detail='Email already exists', status_code=HTTPStatus.CONFLICT
             )
 
     new_user = User(
@@ -54,7 +54,7 @@ async def update_user(
 ):
     if id != current_user.id:
         raise HTTPException(
-            datail='User do not have access to make this change',
+            detail='User do not have access to make this change',
             status_code=HTTPStatus.FORBIDEN,
         )
 
@@ -80,7 +80,7 @@ async def update_user(
 async def delete_user(id: int, session: Session, current_user: CurrentUser):
     if id != current_user.id:
         raise HTTPException(
-            datail='User do not have access to make this change',
+            detail='User do not have access to make this change',
             status_code=HTTPStatus.FORBIDEN,
         )
 

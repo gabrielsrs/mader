@@ -29,13 +29,13 @@ async def token(form_data: OAuth2Form, session: Session):
 
     if not user:
         raise HTTPException(
-            datail='Incorrect email or password',
+            detail='Incorrect email or password',
             status_code=HTTPStatus.UNAUTHORIZED,
         )
 
     if not verify_password(form_data.password, user.password):
         raise HTTPException(
-            datail='Incorrect email or password',
+            detail='Incorrect email or password',
             status_code=HTTPStatus.UNAUTHORIZED,
         )
 
