@@ -7,7 +7,7 @@ from sqlalchemy.pool import StaticPool
 
 from mader.app import app
 from mader.database import get_session
-from mader.models import User, table_registry
+from mader.models import Author, User, table_registry
 from mader.security import get_password_hash
 
 
@@ -66,6 +66,28 @@ def token(client, user):
     return response.json()['access_token']
 
 
+@pytest_asyncio.fixture
+async def author(session: AsyncSession):
+    new_author = AuthorFactory()
+
+    session.add(new_author)
+    await session.commit()
+    await session.refresh(new_author)
+
+    return new_author
+
+
+@pytest_asyncio.fixture
+async def other_author(session: AsyncSession):
+    new_author = AuthorFactory(name='other_author')
+
+    session.add(new_author)
+    await session.commit()
+    await session.refresh(new_author)
+
+    return new_author
+
+
 class UserFactory(factory.Factory):
     class Meta:
         model = User
@@ -73,3 +95,10 @@ class UserFactory(factory.Factory):
     username = factory.Sequence(lambda n: f'test{n}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
     password = factory.LazyAttribute(lambda obj: f'{obj.username}:{obj.email}')
+
+
+class AuthorFactory(factory.Factory):
+    class Meta:
+        model = Author
+
+    name = factory.Sequence(lambda n: f'author{n}')
