@@ -58,7 +58,7 @@ class Books(BaseModel):
 
 
 class _AuthorOptionalBase(_SerializationConfig):
-    nome: str | None
+    nome: str | None = None
 
 
 class AuthorSchema(_SerializationConfig):
@@ -69,13 +69,14 @@ class AuthorUpdate(_AuthorOptionalBase):
     pass
 
 
-class PublicAuthor(AuthorSchema):
+class PublicAuthor(BaseModel):
     id: int
+    name: str
 
 
 class FilterAuthor(_AuthorOptionalBase):
-    pass
+    page: int = Field(ge=1, default=1)
 
 
 class Authors(BaseModel):
-    romancistas: list[PublicAuthor | None]
+    romancistas: list[PublicAuthor]
