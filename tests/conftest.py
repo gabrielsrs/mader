@@ -7,7 +7,7 @@ from sqlalchemy.pool import StaticPool
 
 from mader.app import app
 from mader.database import get_session
-from mader.models import Author, User, table_registry
+from mader.models import Author, Book, User, table_registry
 from mader.security import get_password_hash
 
 
@@ -88,6 +88,28 @@ async def other_author(session: AsyncSession):
     return new_author
 
 
+@pytest_asyncio.fixture
+async def book(session: AsyncSession, author):
+    new_book = BookFactory(author_id=author.id)
+
+    session.add(new_book)
+    await session.commit()
+    await session.refresh(new_book)
+
+    return new_book
+
+
+@pytest_asyncio.fixture
+async def other_book(session: AsyncSession):
+    new_book = BookFactory(title='other_book')
+
+    session.add(new_book)
+    await session.commit()
+    await session.refresh(new_book)
+
+    return new_book
+
+
 class UserFactory(factory.Factory):
     class Meta:
         model = User
@@ -102,3 +124,12 @@ class AuthorFactory(factory.Factory):
         model = Author
 
     name = factory.Sequence(lambda n: f'author{n}')
+
+
+class BookFactory(factory.Factory):
+    class Meta:
+        model = Book
+
+    year = factory.Sequence(lambda n: 2000 + n)
+    title = factory.LazyAttribute(lambda obj: f'Title{obj.year}')
+    author_id = 1
