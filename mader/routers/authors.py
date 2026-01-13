@@ -19,8 +19,7 @@ Session = Annotated[AsyncSession, Depends(get_session)]
 
 @router.get('/', response_model=Authors)
 async def filter_author(
-        session: Session,
-        filter: Annotated[FilterAuthor, Query()]
+    session: Session, filter: Annotated[FilterAuthor, Query()]
 ):
     offset = (filter.page - 1) * 20
     limit = filter.page * 20
