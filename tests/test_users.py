@@ -13,6 +13,7 @@ def test_create_user(client):
 
     assert response.status_code == HTTPStatus.CREATED
     assert response.json() == {
+        'id': 1,
         'username': 'alice',
         'email': 'alice@mader.com',
     }
@@ -45,6 +46,7 @@ def test_update_user(client, user, token):
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
+        'id': 1,
         'username': 'alice',
         'email': 'alice@mader.com',
     }
