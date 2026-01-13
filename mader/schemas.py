@@ -31,8 +31,8 @@ class Token(BaseModel):
 
 
 class _BookOptionalBase(_SerializationConfig):
-    ano: int | None
-    titulo: str | None
+    ano: int | None = None
+    titulo: str | None = None
 
 
 class BookSchema(_SerializationConfig):
@@ -42,19 +42,22 @@ class BookSchema(_SerializationConfig):
 
 
 class BookUpdate(_BookOptionalBase):
-    romancista_id: int | None
+    romancista_id: int | None = None
 
 
-class PublicBook(BookSchema):
+class PublicBook(BaseModel):
     id: int
+    year: int
+    title: str
+    author_id: int
 
 
 class FilterBook(_BookOptionalBase):
-    pass
+    page: int = Field(ge=1, default=1)
 
 
 class Books(BaseModel):
-    livro: list[PublicBook | None]
+    livros: list[PublicBook]
 
 
 class _AuthorOptionalBase(_SerializationConfig):
