@@ -24,12 +24,12 @@ async def filter_author(
     offset = (filter.page - 1) * 20
     limit = filter.page * 20
 
-    authors = await session.scalars(
-        select(Author)
-        .where(Author.name.ilike(f'%{filter.nome}%'))
-        .offset(offset)
-        .limit(limit)
-    )
+    stmt = select(Author)
+
+    if filter.nome:
+        stmt = stmt.where(Author.name.ilike(f'%{filter.nome}%'))
+
+    authors = await session.scalars(stmt.offset(offset).limit(limit))
 
     return {'romancistas': authors}
 
