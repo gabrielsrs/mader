@@ -1,0 +1,26 @@
+services:
+  mader_database:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD:  ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  mader_app:
+    image: mader_app
+    build: .
+    entrypoint: ./entrypoint.sh
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mader_database
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@mader_database:5432/${POSTGRES_DB}
+
+volumes:
+  pgdata:
+
