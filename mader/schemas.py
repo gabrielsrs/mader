@@ -1,12 +1,18 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from typing import Annotated
+
+from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field
 
 
 class _SerializationConfig(BaseModel):
     model_config = ConfigDict(str_to_lower=True, str_strip_whitespace=True)
 
 
+def trim_whitespace(value: str) -> str:
+    return ' '.join(value.split())
+
+
 class UserSchema(BaseModel):
-    username: str
+    username: Annotated[str, AfterValidator(trim_whitespace)]
     email: EmailStr
     senha: str = Field(min_length=3)
 
@@ -33,12 +39,12 @@ class Token(BaseModel):
 
 class _BookOptionalBase(_SerializationConfig):
     ano: int | None = None
-    titulo: str | None = None
+    titulo: Annotated[str, AfterValidator(trim_whitespace)] | None = None
 
 
 class BookSchema(_SerializationConfig):
     ano: int
-    titulo: str
+    titulo: Annotated[str, AfterValidator(trim_whitespace)]
     romancista_id: int
 
 
@@ -62,11 +68,11 @@ class Books(BaseModel):
 
 
 class _AuthorOptionalBase(_SerializationConfig):
-    nome: str | None = None
+    nome: Annotated[str, AfterValidator(trim_whitespace)] | None = None
 
 
 class AuthorSchema(_SerializationConfig):
-    nome: str
+    nome: Annotated[str, AfterValidator(trim_whitespace)]
 
 
 class AuthorUpdate(_AuthorOptionalBase):
