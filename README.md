@@ -1,4 +1,4 @@
-# 📚 MADR
+# 📚 MADER
 
 Projeto final do curso **FastAPI do Zero**
 🔗 Curso: [https://fastapidozero.dunossauro.com](https://fastapidozero.dunossauro.com)
@@ -7,7 +7,7 @@ Projeto final do curso **FastAPI do Zero**
 
 ## 🧠 Sobre o projeto
 
-O **MADR** é uma API REST desenvolvida em **FastAPI** para gerenciar:
+O **MADER** é uma API REST desenvolvida em **FastAPI** para gerenciar:
 
 * 👤 Contas de usuários (autenticação e autorização)
 * 📖 Livros
@@ -165,8 +165,8 @@ task test
 | POST   | `/conta`         |
 | PUT    | `/conta/{id}`    |
 | DELETE | `/conta/{id}`    |
-| POST   | `/token`         |
-| POST   | `/refresh-token` |
+| POST   | `/auth/token`         |
+| POST   | `/auth/refresh-token` |
 
 ---
 
