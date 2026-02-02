@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from mader.database import get_session
-from mader.models import Book, User
+from mader.models import Author, Book, User
 from mader.schemas import (
     Books,
     BookSchema,
@@ -75,6 +75,16 @@ async def create_book(
         raise HTTPException(
             detail=f'{book.titulo} already exist',
             status_code=HTTPStatus.CONFLICT,
+        )
+
+    db_author = await session.scalar(
+        select(Author).where(Author.id == book.romancista_id)
+    )
+
+    if not db_author:
+        raise HTTPException(
+            detail=f'Author {book.romancista_id} not found',
+            status_code=HTTPStatus.NOT_FOUND,
         )
 
     new_book = Book(
