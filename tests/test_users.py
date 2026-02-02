@@ -30,7 +30,7 @@ def test_create_existed_user(client, user):
     )
 
     assert response.status_code == HTTPStatus.CONFLICT
-    assert response.json() == {'detail': 'Username already exists'}
+    assert response.json() == {'message': 'Username already exists'}
 
 
 def test_update_user(client, user, token):

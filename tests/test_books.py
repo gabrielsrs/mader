@@ -47,7 +47,7 @@ def test_get_non_existed_book_by_id(client):
     response = client.get('/livro/10')
 
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'Book not found'}
+    assert response.json() == {'message': 'Book not found'}
 
 
 def test_create_book(client, token, author):
@@ -82,7 +82,7 @@ def test_create_book_with_existed_title(client, token, author, book):
     )
 
     response.status_code = HTTPStatus.CONFLICT
-    response.json() == {'detail': f'{book.title} already exist'}
+    response.json() == {'message': f'{book.title} already exist'}
 
 
 def test_update_book(client, book, token):
@@ -111,7 +111,7 @@ def test_update_non_existed_book(client, token, book):
     )
 
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'Book not exist'}
+    assert response.json() == {'message': 'Book not exist'}
 
 
 def test_update_book_with_existed_title(client, token, book, other_book):
@@ -123,7 +123,7 @@ def test_update_book_with_existed_title(client, token, book, other_book):
     )
 
     assert response.status_code == HTTPStatus.CONFLICT
-    assert response.json() == {'detail': f'{other_title} already exist'}
+    assert response.json() == {'message': f'{other_title} already exist'}
 
 
 def test_delete_book(client, book, token):
@@ -143,4 +143,4 @@ def test_delete_non_existed_book(client, token):
     )
 
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'Book not exist'}
+    assert response.json() == {'message': 'Book not exist'}

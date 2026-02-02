@@ -35,7 +35,7 @@ def test_get_non_existed_author_by_id(client):
     response = client.get('/romancista/10')
 
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'Author not found'}
+    assert response.json() == {'message': 'Author not found'}
 
 
 def test_create_author(client, token):
@@ -57,7 +57,7 @@ def test_create_user_with_existed_name(client, token, author):
     )
 
     assert response.status_code == HTTPStatus.CONFLICT
-    assert response.json() == {'detail': f'{author.name} already exist'}
+    assert response.json() == {'message': f'{author.name} already exist'}
 
 
 def test_update_author(client, token, author):
@@ -79,7 +79,7 @@ def test_update_non_existed_author(client, token, author):
     )
 
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'Author not exist'}
+    assert response.json() == {'message': 'Author not exist'}
 
 
 def test_update_author_with_existed_name(client, token, author, other_author):
@@ -91,7 +91,7 @@ def test_update_author_with_existed_name(client, token, author, other_author):
     )
 
     assert response.status_code == HTTPStatus.CONFLICT
-    assert response.json() == {'detail': f'{other_name} already exist'}
+    assert response.json() == {'message': f'{other_name} already exist'}
 
 
 def test_delete_author(client, token, author):
@@ -111,4 +111,4 @@ def test_delete_non_existed_author(client, token):
     )
 
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert response.json() == {'detail': 'Author not exist'}
+    assert response.json() == {'message': 'Author not exist'}
