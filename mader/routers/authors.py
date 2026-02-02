@@ -8,7 +8,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from mader.database import get_session
 from mader.models import Author, User
-from mader.schemas import Authors, AuthorSchema, FilterAuthor, PublicAuthor
+from mader.schemas import (
+    Authors,
+    AuthorSchema,
+    FilterAuthor,
+    Message,
+    PublicAuthor,
+)
 from mader.security import get_current_user
 
 router = APIRouter(prefix='/romancista', tags=['authors'])
@@ -98,7 +104,7 @@ async def update_author(
         )
 
 
-@router.delete('/{id}')
+@router.delete('/{id}', response_model=Message)
 async def delete_author(id: int, session: Session, current_user: CurrentUser):
     current_author = await session.scalar(
         select(Author).where(Author.id == id)
