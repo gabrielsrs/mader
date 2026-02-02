@@ -55,7 +55,7 @@ async def update_user(
     if id != current_user.id:
         raise HTTPException(
             detail='User do not have access to make this change',
-            status_code=HTTPStatus.FORBIDEN,
+            status_code=HTTPStatus.FORBIDDEN,
         )
 
     try:
@@ -81,7 +81,7 @@ async def delete_user(id: int, session: Session, current_user: CurrentUser):
     if id != current_user.id:
         raise HTTPException(
             detail='User do not have access to make this change',
-            status_code=HTTPStatus.FORBIDEN,
+            status_code=HTTPStatus.FORBIDDEN,
         )
 
     await session.delete(current_user)
