@@ -20,7 +20,7 @@ def test_authentication_with_non_existed_user(client, user):
     )
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert response.json() == {'detail': 'Incorrect email or password'}
+    assert response.json() == {'message': 'Incorrect email or password'}
 
 
 def test_unauthorized_user(client, user):
@@ -34,7 +34,7 @@ def test_unauthorized_user(client, user):
     )
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert response.json() == {'detail': 'Not authenticated'}
+    assert response.json() == {'message': 'Not authenticated'}
 
 
 def test_refresh_token(client, token):

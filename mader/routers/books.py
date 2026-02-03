@@ -7,8 +7,15 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from mader.database import get_session
-from mader.models import Book, User
-from mader.schemas import Books, BookSchema, BookUpdate, FilterBook, PublicBook
+from mader.models import Author, Book, User
+from mader.schemas import (
+    Books,
+    BookSchema,
+    BookUpdate,
+    FilterBook,
+    Message,
+    PublicBook,
+)
 from mader.security import get_current_user
 
 router = APIRouter(prefix='/livro', tags=['books'])
@@ -70,6 +77,16 @@ async def create_book(
             status_code=HTTPStatus.CONFLICT,
         )
 
+    db_author = await session.scalar(
+        select(Author).where(Author.id == book.romancista_id)
+    )
+
+    if not db_author:
+        raise HTTPException(
+            detail=f'Author {book.romancista_id} not found',
+            status_code=HTTPStatus.NOT_FOUND,
+        )
+
     new_book = Book(
         year=book.ano,
         title=book.titulo,
@@ -116,7 +133,7 @@ async def update_book(
         )
 
 
-@router.delete('/{id}')
+@router.delete('/{id}', response_model=Message)
 async def delete_book(id: int, session: Session, current_user: CurrentUser):
     current_book = await session.scalar(select(Book).where(Book.id == id))
 
